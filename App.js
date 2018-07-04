@@ -2,61 +2,52 @@ import React from 'react';
 import {
   View,
   Animated,
-  TouchableOpacity,
-  Easing,
+  StyleSheet,
   Dimensions,
-  StyleSheet
-} from 'react-native';
+  Easing,
+  TouchableOpacity
+} from 'react-native'
 
 
 export default class App extends React.Component {
-  constructor() {
-    super()
-    this.animateValue = new Animated.Value(0);
-  }
-  press = () => {
-    this.animate();
+  componentWillMount() {
+    this.translateY = new Animated.Value(250);
   }
 
   animate = () => {
-    Animated.timing(this.animateValue, {
-      toValue: 50,
+    this.translateY.setValue(250);
+    Animated.timing(this.translateY, {
+      toValue: 0,
       duration: 4000,
-      easing: Easing.easeOutQuad
+      easing:Easing.cubic
     }).start()
   }
 
   render() {
-    const imgStyle = {
-      width: 150,
-      height: 250,
-      backgroundColor:'pink'
-
-    }
     return (
-      <Animated.View
-      style={styles.container}
-      >
-      <Animated.View style={{transform:[{translateY:this.animateValue}]}}>
-        <TouchableOpacity
-          onPress={this.press}
-          style={[imgStyle,{backgroundColor:'pink'},{right:50}]}        
+      <View>
+        <Animated.View
+          style={[{ transform: [{ translateY: this.translateY }] },{top:this.translateY},styles.viewStyle]}
+
+        >
+          <TouchableOpacity
+           onPress={() => this.animate()}
+           style={styles.viewStyle}
           >
-          <Animated.Image
-            style={[imgStyle,{resizeMode:'contain'}]}
-            source={{ uri: 'https://i.pinimg.com/736x/bd/7c/95/bd7c9566f984f16a696a750711fcb8c0--rocket-ships-space-ship.jpg' }} />
-        </TouchableOpacity>
+            <Animated.Image
+              style={[styles.viewStyle,{resizeMode:'contain'}]}
+              source={{ uri: 'https://cdn.pixabay.com/photo/2016/05/25/13/33/ship-1414820_960_720.png' }}
+            />
+          </TouchableOpacity>
         </Animated.View>
-      </Animated.View>
+      </View>
     )
   }
-}
 
+}
 const styles=StyleSheet.create({
-  container:{
-    height:Dimensions.get('window').height,
-    width:Dimensions.get('window').width,
-    justifyContent:'flex-end',
-    backgroundColor:'blue',
+  viewStyle:{
+    width: 130,
+    height: 200
   }
 })
